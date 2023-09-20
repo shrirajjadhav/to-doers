@@ -12,11 +12,11 @@ function App() {
 
   const handleAddTask = () =>{
     setError('')  // resets error state
-    if(newTask==='') {
+    if(newTask.trim()==='') {
       setError('Please add a task title')
     }else{
 
-      setTaskList([...taskList, newTask])
+      setTaskList([...taskList, newTask.trim()])
       setNewTask('')
     }
   }
