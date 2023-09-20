@@ -3,7 +3,6 @@ import {useState, useEffect} from 'react'
 import './App.css'
 import Fieldset from './components/Fieldset'
 import useLocalStorage from './hooks/useLocalStorage'
-// import Card from './components/Card'
 
 function App() {
 
@@ -12,33 +11,16 @@ function App() {
   const [error, setError] = useState('')
   const [value, setValue] = useLocalStorage('tasks')
 
-  // useEffect(()=>{
-  //   setTaskList(()=> value===null ? [] : value)
-    
-  // },[value])
+  
   useEffect(()=>{
     
     if(value!==null){
-      // const allTasks = JSON.parse(allTasksJSON)
       setTaskList([...value])
     }else{
       localStorage.setItem('tasks', JSON.stringify([]))
     }
   },[value])
-  // useEffect(()=>{
-  //   const allTasksJSON = localStorage.getItem('tasks')
-  //   if(allTasksJSON!==null){
-  //     const allTasks = JSON.parse(allTasksJSON)
-  //     setTaskList([...allTasks])
-  //   }else{
-  //     localStorage.setItem('tasks', JSON.stringify([]))
-  //   }
-  // },[])
-
-  // const updateLocalStorage = useCallback(()=>{
-  //   localStorage.setItem('tasks',JSON.stringify(taskList))
-  // },[taskList])
-
+  
   const handleAddTask = () =>{
     setError('')  // resets error state
     if(newTask.trim()==='') {
@@ -46,27 +28,15 @@ function App() {
     }else{
 
       setTaskList(()=>{
-        // localStorage.setItem('tasks',JSON.stringify([...taskList,newTask.trim()]))
         setValue([...taskList,newTask.trim()])
         return [...taskList, newTask.trim()]
       })
-      // setValue(taskList)
-      // updateLocalStorage()
+     
       setNewTask('')
     }
   }
 
-  // const handleAddTask = useCallback(()=>{
-  //   setError('')
-  //   if(newTask.trim()===''){
-  //     setError('Please add a task title')
-  //   }else{
-  //     setTaskList([...taskList,newTask.trim()])
-  //     localStorage.setItem('tasks', JSON.stringify(taskList))
-  //     setNewTask('')
-  //   }
-  // },[])
-
+  
 
   return (
     <>
