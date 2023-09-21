@@ -1,19 +1,29 @@
-import {useState, useEffect} from 'react'
+import {useState, useEffect, ChangeEvent } from 'react'
 
 import './App.css'
 import Fieldset from './components/Fieldset'
 import useLocalStorage from './hooks/useLocalStorage'
+import uuid4 from 'uuid4'
+
+type TaskType = {
+  _id: string,
+  title: string,
+  isComplete: boolean
+}
 
 function App() {
+  const defaultTask = {
+    _id:'',
+    title:'',
+    isComplete: false
+  }
 
-  const [newTask, setNewTask] = useState('')
-  const [taskList, setTaskList] = useState<string[]>([])
+  const [newTask, setNewTask] = useState<TaskType>(defaultTask)
+  const [taskList, setTaskList] = useState<TaskType[]>([])
   const [error, setError] = useState('')
   const [value, setValue] = useLocalStorage('tasks')
-
   
   useEffect(()=>{
-    
     if(value!==null){
       setTaskList([...value])
     }else{
@@ -23,20 +33,40 @@ function App() {
   
   const handleAddTask = () =>{
     setError('')  // resets error state
-    if(newTask.trim()==='') {
+    if(newTask.title.trim()==='') {
       setError('Please add a task title')
     }else{
 
       setTaskList(()=>{
-        setValue([...taskList,newTask.trim()])
-        return [...taskList, newTask.trim()]
+        const uuid = uuid4()
+        setValue([...taskList,{...newTask, _id: uuid}])
+        return [...taskList, {...newTask, _id: uuid}]
       })
      
-      setNewTask('')
+      setNewTask(defaultTask)
     }
   }
 
+  function handleOnChange(e: ChangeEvent<HTMLInputElement>) {
+    setNewTask({ ...newTask, title: e.target.value })
+  }
   
+  function handleCheckbox(id:string) {
+
+    const updatedTaskList = taskList
+
+    updatedTaskList.map((task)=>{
+      if(task._id===id){
+        task.isComplete = !task.isComplete
+      }
+
+    })
+
+    setTaskList(()=>{
+      setValue(updatedTaskList)
+      return updatedTaskList
+    })
+  }
 
   return (
     <>
@@ -54,9 +84,9 @@ function App() {
         <input 
           className='border border-slate-500 rounded-md py-2 px-1 w-full' 
           placeholder='demo task 1' 
-          value={newTask}
+          value={newTask.title}
           autoFocus
-          onChange={(e)=> setNewTask(e.target.value)}
+          onChange={(e)=> handleOnChange(e)}
           onKeyDown={(e)=> e.key === 'Enter' ? handleAddTask() : ''}
           type="text" name="task-title" id="task-title" />
         <button onClick={handleAddTask} className='bg-green-800 font-bold text-white py-2 rounded-md'>Add Task</button>
@@ -66,10 +96,10 @@ function App() {
         {taskList.length===0 &&  
           <p>No tasks right now!</p>
         }
-        {taskList.length!==0 &&  taskList.map((task,index)=> (
+        {taskList.length!==0 &&  taskList.map(({_id,title, isComplete},index)=> (
           <p key={index} className=' border-b-2 px-2 py-1 flex'>
-            <input type="checkbox" name="check" id={`${index}`} />
-            <span className='px-2 text-xl'>{task}</span>
+            <input type="checkbox" checked={isComplete} onChange={()=>handleCheckbox(_id)} name="check" id={`${index}`} />
+            <span className={isComplete ? 'px-2 text-xl line-through' : 'px-2 text-xl'} >{title}</span>
             <span className='ml-auto '>
               <button className='rounded-full mx-2 p-1 bg-blue-400 text-white'>📝</button>
               <button className='rounded-full mx-2 p-1 bg-red-400 text-white'>🚮</button>
