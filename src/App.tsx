@@ -1,4 +1,5 @@
 import {useState, useEffect, ChangeEvent } from 'react'
+// import {FaTrashCan, FaPenToSquare} from 'react-icons/fa6'
 
 import './App.css'
 import Fieldset from './components/Fieldset'
@@ -22,6 +23,7 @@ function App() {
   const [taskList, setTaskList] = useState<TaskType[]>([])
   const [error, setError] = useState('')
   const [value, setValue] = useLocalStorage('tasks')
+
   
   useEffect(()=>{
     if(value!==null){
@@ -54,12 +56,10 @@ function App() {
   function handleCheckbox(id:string) {
 
     const updatedTaskList = taskList
-
     updatedTaskList.map((task)=>{
       if(task._id===id){
         task.isComplete = !task.isComplete
       }
-
     })
 
     setTaskList(()=>{
@@ -74,8 +74,6 @@ function App() {
       <h1 className=' text-5xl font-bold mx-4 mt-8' >Task Tracker</h1>
       <p className=' text-xl mx-4 my-8'>A simple Task Tracker 😎</p>
 
-      {/* <div className="container"> */}
-      
       <Fieldset legend={'Add new task'}>
         <label htmlFor="task-title" className='text-lg '>Enter a Task Title:</label>
         {error!=='' && 
@@ -97,19 +95,20 @@ function App() {
           <p>No tasks right now!</p>
         }
         {taskList.length!==0 &&  taskList.map(({_id,title, isComplete},index)=> (
-          <p key={index} className=' border-b-2 px-2 py-1 flex'>
+          <div key={index} className=' border-b-2 px-2 py-1 flex'>
             <input type="checkbox" checked={isComplete} onChange={()=>handleCheckbox(_id)} name="check" id={`${index}`} />
-            <span className={isComplete ? 'px-2 text-xl line-through' : 'px-2 text-xl'} >{title}</span>
-            <span className='ml-auto '>
-              <button className='rounded-full mx-2 p-1 bg-blue-400 text-white'>📝</button>
-              <button className='rounded-full mx-2 p-1 bg-red-400 text-white'>🚮</button>
-            </span>
-          </p>
+            <span className={isComplete ? 'px-2 text-xl line-through text-slate-300' : 'px-2 text-xl'} >{title}</span>
+            {/* <span className='ml-auto grid'>
+              <button className=' flex  mx-2 p-1 bg-blue-400 text-white'><FaPenToSquare /> Edit</button>
+              <button className=' flex  mx-2 p-1 bg-red-400 text-white'><FaTrashCan /> Delete</button>
+            </span> */}
+          </div>
         ))
           
         }
       </Fieldset>
-      {/* </div> */}
+      
+
     </div>
     </>
   )
