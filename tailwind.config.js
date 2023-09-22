@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+/*eslint-env node*/
 
 import defaultTheme from 'tailwindcss/defaultTheme'
 
@@ -15,7 +16,11 @@ export default {
     },
   },
   plugins: [
+    require('@tailwindcss/typography'),
     require('daisyui')
   ],
+  daisyui:{
+    themes: ['light']
+  }
 }
 
