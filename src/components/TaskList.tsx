@@ -5,10 +5,12 @@ import { TaskType } from "../types/task.type";
 
 type TaskListProp = {
     taskList: TaskType[],
-    onChangeHandler: (id:string)=> void
+    onChangeHandler: (id:string)=> void,
+    handleEditTask: (id:string, updatedTitle:string)=> void
+    handleDeleteTask: (id:string)=> void,
 }
 
-const TaskList = ({taskList, onChangeHandler} : TaskListProp) => {
+const TaskList = ({taskList, onChangeHandler, handleEditTask, handleDeleteTask} : TaskListProp) => {
   return (
     <>
       <Fieldset legend="List of Tasks">
@@ -19,6 +21,8 @@ const TaskList = ({taskList, onChangeHandler} : TaskListProp) => {
               key={index}
               task={task}
               onChangeHandler={onChangeHandler}
+              handleEditTask={handleEditTask}
+              handleDeleteTask={handleDeleteTask}
             />
           ))}
       </Fieldset>

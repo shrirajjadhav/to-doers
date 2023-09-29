@@ -54,25 +54,53 @@ function App() {
   
   function handleIsCompleteCheckbox(id:string) {
 
-    const updatedTaskList = taskList
-    updatedTaskList.map((task)=>{
+    const taskListRef = taskList
+    taskListRef.map((task)=>{
       if(task._id===id){
         task.isComplete = !task.isComplete
       }
     })
 
     setTaskList(()=>{
-      setValue(updatedTaskList)
-      return updatedTaskList
+      setValue(taskListRef)
+      return taskListRef
     })
   }
+
+  function handleEditTask (id:string, updatedTitle: string) {
+    const taskListRef = taskList
+    taskListRef.map((task)=>{
+      if(task._id===id){
+        task.title = updatedTitle
+      }
+    })
+
+    setTaskList(()=>{
+      setValue(taskListRef)
+      return taskListRef
+    })
+  }
+
+  function handleDeleteTask (id:string) {
+    const taskListRef = taskList.filter((task) =>{
+      if(task._id!==id){
+        return task
+      }
+    })
+  
+    setTaskList(()=>{
+      setValue(taskListRef)
+      return taskListRef
+    })
+
+  } 
 
   return (
     <>
     <Header />
     <div className="container mx-auto max-w-md ">
       <AddTask error={error} onChangeHandler={handleNewTaskInputChange} newTask={newTask} handleAddTask={handleAddTask} />
-      <TaskList taskList={taskList} onChangeHandler={handleIsCompleteCheckbox} />
+      <TaskList taskList={taskList} onChangeHandler={handleIsCompleteCheckbox} handleEditTask={handleEditTask} handleDeleteTask={handleDeleteTask} />
     </div>
     <Footer />
     </>

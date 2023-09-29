@@ -1,13 +1,22 @@
+import { useRef } from "react";
 import { SlOptions } from "react-icons/sl";
 import { FaPenToSquare, FaTrashCan } from "react-icons/fa6";
 import { TaskType } from "../types/task.type";
+import EditTask from "./EditTask";
+import DeleteTask from "./DeleteTask";
 
 type TaskListItemProp = {
   task: TaskType;
-  onChangeHandler: (id: string) => void;
+  onChangeHandler: (id: string) => void,
+  handleEditTask: (id:string, updatedTitle:string)=> void
+  handleDeleteTask: (id: string) => void,
 };
 
-const TaskListItem = ({ task, onChangeHandler }: TaskListItemProp) => {
+const TaskListItem = ({ task, onChangeHandler, handleEditTask, handleDeleteTask }: TaskListItemProp) => {
+
+  const editModalElementRef = useRef<HTMLDialogElement>(null)
+  const deleteModalElementRef = useRef<HTMLDialogElement>(null)
+
   return (
     <>
       <div
@@ -32,7 +41,7 @@ const TaskListItem = ({ task, onChangeHandler }: TaskListItemProp) => {
           {task.title}
         </label>
         <button
-          className="btn ml-auto swap swap-rotate"
+          className="btn ml-auto "
           id={"toggleBtn-" + task._id}
           onClick={() => {
             const theClassList = document.getElementById(
@@ -54,13 +63,22 @@ const TaskListItem = ({ task, onChangeHandler }: TaskListItemProp) => {
       </div>
 
       <div className=" hidden" id={"collapse-" + task._id}>
-        <button className="btn mx-1 btn-info flex-1" id={"edit-" + task._id}>
+        <button onClick={()=> editModalElementRef.current?.showModal()} className="btn mx-1 btn-info flex-1" id={"edit-" + task._id}>
           <FaPenToSquare /> {" Edit"}
         </button>
-        <button className="btn mx-1 btn-error flex-1" id={"delete-" + task._id}>
+        <button onClick={()=> deleteModalElementRef.current?.showModal()}  className="btn mx-1 btn-error flex-1" id={"delete-" + task._id}>
           <FaTrashCan /> {" Delete"}
         </button>
       </div>
+
+      <EditTask task={task} handleEditTask={handleEditTask} modalElementRef={editModalElementRef} />
+      <DeleteTask task={task} handleDeleteTask={handleDeleteTask} modalElementRef={deleteModalElementRef} />
+
+      
+
+      
+
+      
     </>
   );
 };

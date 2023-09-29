@@ -18,14 +18,14 @@ const AddTask = ({error, handleAddTask, onChangeHandler, newTask} : AddTaskProp)
           <p className='text-sm text-red-500'>{error}</p>
         }
         <input 
-          className='border border-slate-500 rounded-md py-2 px-1 w-full' 
+          className='input input-bordered w-full' 
           placeholder='demo task 1' 
           value={newTask.title}
           autoFocus
           onChange={(e)=> onChangeHandler(e)}
           onKeyDown={(e)=> e.key === 'Enter' ? handleAddTask() : ''}
           type="text" name="task-title" id="task-title" />
-        <button onClick={handleAddTask} className='bg-green-800 font-bold text-white py-2 rounded-md'>Add Task</button>
+        <button onClick={handleAddTask} className='btn btn-success'>Add Task</button>
       </Fieldset>
     </>
   )
