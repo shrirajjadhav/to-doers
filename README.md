@@ -23,7 +23,7 @@ To-Doers is a Open Source project made by [Shriraj Jadhav](https://github.com/sh
 - Mark tasks as complete / incomplete
 - User-friendly interface
 - Responsive design for various devices
-- Saves user data in Browser Local Storate (for now)
+- Saves user data in Browser Local Storage (for now)
 
 ## Getting Started
 
@@ -64,7 +64,7 @@ yarn
 1. Start the app:
 
 ```
-npm dev
+npm run dev
 ```
 with `yarn`
 ```
