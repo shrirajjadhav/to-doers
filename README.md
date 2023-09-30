@@ -2,18 +2,19 @@
 
 A simple ToDo app for the people who do! 😎 
 
-To-Doers is a Open Source project made by [Shriraj Jadhav](https://github.com/shrirajjadhav)
+To-Doers is a featured portfolio project made by [Shriraj Jadhav](https://github.com/shrirajjadhav)
 
 ## Table of Contents
 
 - [Readme - To-Doers 📝](#readme---to-doers-)
   - [Table of Contents](#table-of-contents)
   - [Features](#features)
+  - [Technologies used](#technologies-used)
   - [Getting Started](#getting-started)
     - [Prerequisites](#prerequisites)
     - [Installation](#installation)
     - [Usage](#usage)
-    - [Contributing](#contributing)
+    - [Managing Issues \& Changes](#managing-issues--changes)
     - [License](#license)
   - [Resources](#resources)
 
@@ -25,13 +26,23 @@ To-Doers is a Open Source project made by [Shriraj Jadhav](https://github.com/sh
 - Responsive design for various devices
 - Saves user data in Browser Local Storage (for now)
 
+## Technologies used
+
+- [React](https://react.dev/) (react hooks)
+- [Firebase](https://firebase.google.com/) (as backend)
+- [TailWindCSS](https://tailwindcss.com/) (Css tool)
+- [DaisyUI](https://daisyui.com/) (TailwindCSS Component Library)
+- [React Icons](https://react-icons.github.io/react-icons) (icon library for react)
+- [Vite](https://vitejs.dev/) (local development server and bundler)
+
 ## Getting Started
 
 ### Prerequisites
 
 Before you begin, ensure you have met the following requirements:
 
-- nodejs, `npm` | `yarn` (this project uses `yarn`)
+- [nodejs](https://nodejs.org/en), `npm` | `yarn` (this project uses [yarn](https://yarnpkg.com/))
+- [Firebase](https://console.firebase.google.com/) Project (setup a firebase project, [initialize](https://firebase.google.com/docs) firebase app and acquire app config keys )
 
 ### Installation
 
@@ -59,6 +70,12 @@ Using `yarn`
 yarn 
 ```
 
+4. Setup Firebase config
+
+Edit `src/config/firebase.sample.ts`, add your firebase app credentials.
+
+Rename the file `firebase.sample.ts` as `firebase.ts`
+
 ### Usage
 
 1. Start the app:
@@ -75,17 +92,9 @@ yarn dev
 
 3. Begin managing your tasks!
 
-### Contributing
-We welcome contributions from the community! To contribute to the project, follow these steps:
+### Managing Issues & Changes
 
-1. Fork the repository
-2. Create a new branch: `git checkout -b feat/feature-name`
-3. Make your changes and commit them: `git commit -m 'Add new feature'`
-4. Push to the branch: `git push origin feat/feature-name`
-5. Submit a pull request
-
-
-For major changes, please open an issue first to discuss the proposed changes.
+For major changes or fixes, please open an issue to discuss the proposed changes.
 
 ### License
 This project is licensed under the [GPL-3.0 license](https://github.com/shrirajjadhav/to-doers/blob/main/LICENSE).
