@@ -10,7 +10,6 @@ import TaskList from './components/TaskList'
 import Footer from './components/Footer'
 
 
-
 function App() {
 
   const defaultTask = {

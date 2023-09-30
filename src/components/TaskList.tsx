@@ -1,4 +1,3 @@
-import React from "react";
 import Fieldset from "./Fieldset";
 import TaskListItem from "./TaskListItem";
 import { TaskType } from "../types/task.type";
