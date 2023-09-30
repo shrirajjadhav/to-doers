@@ -1,5 +1,6 @@
 {
-  "name": "task-tracker",
+  "name": "to-doers",
+  "description": "a simple to-do app for the people who do",
   "private": true,
   "version": "0.0.0",
   "type": "module",
