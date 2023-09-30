@@ -1,69 +1,107 @@
-import {useState} from 'react'
+import {useState, useEffect, ChangeEvent } from 'react'
+import { TaskType } from './types/task.type'
 
-import './App.css'
-import Fieldset from './components/Fieldset'
-// import Card from './components/Card'
+
+import useLocalStorage from './hooks/useLocalStorage'
+import uuid4 from 'uuid4'
+import Header from './components/Header'
+import AddTask from './components/AddTask'
+import TaskList from './components/TaskList'
+import Footer from './components/Footer'
+
 
 function App() {
 
-  const [newTask, setNewTask] = useState('')
-  const [taskList, setTaskList] = useState<string[]>([])
-  const [error, setError] = useState('')
+  const defaultTask = {
+    _id:'',
+    title:'',
+    isComplete: false
+  }
 
+  const [newTask, setNewTask] = useState<TaskType>(defaultTask)
+  const [taskList, setTaskList] = useState<TaskType[]>([])
+  const [error, setError] = useState('')
+  const [value, setValue] = useLocalStorage('tasks')
+
+  useEffect(()=>{
+    if(value!==null){
+      setTaskList([...value])
+    }else{
+      localStorage.setItem('tasks', JSON.stringify([]))
+    }
+  },[value])
+  
   const handleAddTask = () =>{
     setError('')  // resets error state
-    if(newTask==='') {
+    if(newTask.title.trim()==='') {
       setError('Please add a task title')
     }else{
 
-      setTaskList([...taskList, newTask])
-      setNewTask('')
+      setTaskList(()=>{
+        const uuid = uuid4()
+        setValue([...taskList,{...newTask, _id: uuid}])
+        return [...taskList, {...newTask, _id: uuid}]
+      })
+     
+      setNewTask(defaultTask)
     }
   }
 
+  function handleNewTaskInputChange(e: ChangeEvent<HTMLInputElement>) {
+    setNewTask({ ...newTask, title: e.target.value })
+  }
+  
+  function handleIsCompleteCheckbox(id:string) {
+
+    const taskListRef = taskList
+    taskListRef.map((task)=>{
+      if(task._id===id){
+        task.isComplete = !task.isComplete
+      }
+    })
+
+    setTaskList(()=>{
+      setValue(taskListRef)
+      return taskListRef
+    })
+  }
+
+  function handleEditTask (id:string, updatedTitle: string) {
+    const taskListRef = taskList
+    taskListRef.map((task)=>{
+      if(task._id===id){
+        task.title = updatedTitle
+      }
+    })
+
+    setTaskList(()=>{
+      setValue(taskListRef)
+      return taskListRef
+    })
+  }
+
+  function handleDeleteTask (id:string) {
+    const taskListRef = taskList.filter((task) =>{
+      if(task._id!==id){
+        return task
+      }
+    })
+  
+    setTaskList(()=>{
+      setValue(taskListRef)
+      return taskListRef
+    })
+
+  } 
+
   return (
     <>
+    <Header />
     <div className="container mx-auto max-w-md ">
-      <h1 className=' text-5xl font-bold mx-4 mt-8' >Task Tracker</h1>
-      <p className=' text-xl mx-4 my-8'>A simple Task Tracker 😎</p>
-
-      {/* <div className="container"> */}
-      
-      <Fieldset legend={'Add new task'}>
-        <label htmlFor="task-title" className='text-lg '>Enter a Task Title:</label>
-        {error!=='' && 
-          <p className='text-sm text-red-500'>{error}</p>
-        }
-        <input 
-          className='border border-slate-500 rounded-md py-2 px-1 w-full' 
-          placeholder='demo task 1' 
-          value={newTask}
-          autoFocus
-          onChange={(e)=> setNewTask(e.target.value)}
-          onKeyDown={(e)=> e.key === 'Enter' ? handleAddTask() : ''}
-          type="text" name="task-title" id="task-title" />
-        <button onClick={handleAddTask} className='bg-green-800 font-bold text-white py-2 rounded-md'>Add Task</button>
-      </Fieldset>
-
-      <Fieldset legend='List of Tasks'>
-        {taskList.length===0 &&  
-          <p>No tasks right now!</p>
-        }
-        {taskList.length!==0 &&  taskList.map((task,index)=> (
-          <p key={index} className=' border-b-2 px-2 py-1 flex'>
-            <input type="checkbox" name="check" id={`${index}`} />
-            <span className='px-2 text-xl'>{task}</span>
-            <span className='ml-auto '>
-              <button className='rounded-full mx-2 p-1 bg-blue-400 text-white'>📝</button>
-              <button className='rounded-full mx-2 p-1 bg-red-400 text-white'>🚮</button>
-            </span>
-          </p>
-        ))
-          
-        }
-      </Fieldset>
-      {/* </div> */}
+      <AddTask error={error} onChangeHandler={handleNewTaskInputChange} newTask={newTask} handleAddTask={handleAddTask} />
+      <TaskList taskList={taskList} onChangeHandler={handleIsCompleteCheckbox} handleEditTask={handleEditTask} handleDeleteTask={handleDeleteTask} />
     </div>
+    <Footer />
     </>
   )
 }
